@@ -22,13 +22,13 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Title: Banking Application API
+## Title: Banking Application
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Description
 
-The Banking Application API, built with NestJS, offers essential functionality for handling deposits, withdrawals, transaction history, and user authentication/authorization in a secure and efficient manner. It serves as the core backend system for a basic digital banking platform.
+The Banking Application, built with NestJS, offers essential functionality for handling deposits, withdrawals, transaction history, and user authentication/authorization in a secure and efficient manner. It serves as the core backend system for a basic digital banking platform.
 
 ## Key Features:
 

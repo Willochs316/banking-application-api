@@ -33,9 +33,9 @@ export class UsersController {
   }
 
   // Find a user by phone number
-  @Get('account/:phoneNumber')
-  findByPhoneNumber(@Param('phoneNumber') phoneNumber): Promise<User> {
-    return this.usersService.findByPhoneNumber(phoneNumber);
+  @Get('account/:accountNumber')
+  findByAccountNumber(@Param('accountNumber') accountNumber): Promise<User> {
+    return this.usersService.findByAccountNumber(accountNumber);
   }
 
   // register a user

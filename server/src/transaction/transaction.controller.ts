@@ -1,39 +1,43 @@
-import { Controller, Get, Param, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { TransactionService } from './transaction.service';
-import { Deposit } from 'src/deposit/interfaces/deposit.interface';
-import { Withdraw } from 'src/withdraw/interfaces/withdraw.interface';
+import { DepositService } from './deposit/desposit.service';
+import { WithdrawService } from './withdraw/withdraw.service';
+import { Transaction } from './interfaces/transaction.interface';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Transaction')
 @Controller('transaction')
 export class TransactionController {
-  constructor(private readonly transactionService: TransactionService) {}
+  constructor(
+    private readonly transactionService: TransactionService,
+    private readonly depositService: DepositService,
+    private readonly withdrawService: WithdrawService,
+  ) {}
 
-  // @Get(':phoneNumber')
-  // async getDepositTransactions(
-  //   @Param('phoneNumber') phoneNumber: string,
-  // ): Promise<Deposit[]> {
-  //   const depositTransactions =
-  //     await this.transactionService.getDepositTransactionsByUser(phoneNumber);
-  //   if (!depositTransactions) {
-  //     throw new NotFoundException(
-  //       'No deposit transactions found for this user',
-  //     );
-  //   }
-  //   return depositTransactions;
-  // }
+  @Get(':id')
+  async getUserTransactions(@Param('id') id: string): Promise<Transaction[]> {
+    return this.transactionService.getUserTransactions(id);
+  }
 
-  // @Get(':phoneNumber')
-  // async getWithdrawTransactions(
-  //   @Param('phoneNumber') phoneNumber: string,
-  // ): Promise<Withdraw[]> {
-  //   const withdrawTransactions =
-  //     await this.transactionService.getWithdrawTransactionsByUser(phoneNumber);
-  //   if (!withdrawTransactions) {
-  //     throw new NotFoundException(
-  //       'No withdrawal transactions found for this user',
-  //     );
-  //   }
-  //   return withdrawTransactions;
-  // }
+  @Post('deposit')
+  async deposit(
+    @Body() createTransactionDto: CreateTransactionDto,
+  ): Promise<Transaction> {
+    return this.depositService.makeDeposit(createTransactionDto);
+  }
+
+  @Post('withdraw')
+  async withdraw(
+    @Body() createTransactionDto: CreateTransactionDto,
+  ): Promise<Transaction> {
+    return this.withdrawService.makeWithdrawal(createTransactionDto);
+  }
+
+  @Post('transfer')
+  async transfer(
+    @Body() createTransactionDto: CreateTransactionDto,
+  ): Promise<Transaction> {
+    return this.transactionService.makeTransfer(createTransactionDto);
+  }
 }

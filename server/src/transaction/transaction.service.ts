@@ -1,38 +1,25 @@
 import { Model } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Deposit } from 'src/deposit/interfaces/deposit.interface';
-import { Withdraw } from 'src/withdraw/interfaces/withdraw.interface';
-import { User } from 'src/users/interfaces/user.interface';
 import { Transaction } from './interfaces/transaction.interface';
+import { User } from 'src/users/interfaces/user.interface';
 
 @Injectable()
 export class TransactionService {
   constructor(
-    @InjectModel('Deposit') private readonly depositModel: Model<Deposit>,
-    @InjectModel('Withdraw') private readonly withdrawModel: Model<Withdraw>,
     @InjectModel('Transaction')
     private readonly transactionModel: Model<Transaction>,
-    @InjectModel('User') private readonly userModel: Model<User>,
+    @InjectModel('User') private readonly userModel: Model<User>, // Inject the User model
   ) {}
 
-  // async getWithdrawTransactionsByUser(
-  //   phoneNumber: string,
-  // ): Promise<Withdraw[]> {
-  //   const user = await this.findUserByPhoneNumber(phoneNumber);
-
-  //   if (!user) {
-  //     throw new NotFoundException('User not found');
-  //   }
-
-  //   const withdrawTransactions = await this.withdrawModel
-  //     .find({ accountNumber: phoneNumber })
-  //     .exec();
-
-  //   return withdrawTransactions;
-  // }
-
-  private async findUserByPhoneNumber(phoneNumber: string): Promise<User> {
-    return await this.userModel.findOne({ phoneNumber }).exec();
+  async getUserTransactions(id: string): Promise<Transaction[]> {
+    try {
+      // Find transactions where either source or destination is the given id
+      return await this.transactionModel
+        .find({ $or: [{ source: id }, { destination: id }] })
+        .exec();
+    } catch (error) {
+      throw new BadRequestException('Failed to fetch user transactions');
+    }
   }
 }

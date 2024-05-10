@@ -1,11 +1,15 @@
-export class Transaction {
+import { Document } from 'mongoose';
+
+export interface Transaction extends Document {
   id?: string;
-  transactionDate: string;
-  fullname: string;
-  accountNumber: string;
-  type: 'deposit' | 'withdraw';
+  sourceName: string;
+  source: string;
+  sourceAccountNumber: string;
+  destinationName: string;
+  destination: string;
+  destinationAccountNumber: string;
   amount: number;
-  currency: 'NGN';
-  purposeOfTransaction: string;
-  reference: string;
+  type: 'deposit' | 'withdraw' | 'transfer';
+  reason: string;
+  createdAt: Date;
 }

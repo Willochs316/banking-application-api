@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Button, Typography, Paper } from "@material-ui/core";
-import { useDispatch } from "react-redux";
-import { createDeposit } from "../../../actions/deposits";
 import Input from "./Input";
 import useStyles from "./styles";
 
@@ -18,12 +16,10 @@ const DepositForm = () => {
   });
 
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(createDeposit(depositData));
     clear();
   };
 

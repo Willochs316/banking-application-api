@@ -9,7 +9,7 @@ describe('UsersController', () => {
     const usersServiceMock = {
       findAll: jest.fn(),
       findOne: jest.fn(),
-      findByPhoneNumber: jest.fn(),
+      findByAccountNumber: jest.fn(),
       signup: jest.fn(),
       login: jest.fn(),
       delete: jest.fn(),

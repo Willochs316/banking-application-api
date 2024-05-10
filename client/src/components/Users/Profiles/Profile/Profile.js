@@ -1,13 +1,14 @@
 import React from "react";
-
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import useStyles from "./styles";
 
 const Profile = ({ user, setCurrentId }) => {
-  console.log(user, "profileee");
-
   const classes = useStyles();
+
+  if (!user) {
+    return null;
+  }
 
   const userFields = [
     { label: "Fullname", value: user.user.fullname },

@@ -6,8 +6,6 @@ import useStyles from "./styles";
 const Profiles = ({ user, currentId, setCurrentId }) => {
   const classes = useStyles();
 
-  // const user = JSON.parse(localStorage.getItem("user"));
-
   return (
     <Grid
       className={classes.container}

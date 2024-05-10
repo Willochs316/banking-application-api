@@ -2,7 +2,7 @@ import React from "react";
 import Input from "../Input";
 
 const SignUpFields = ({
-  signUpInfo,
+  formData,
   showPassword,
   handleShowPassword,
   handleChange,
@@ -12,60 +12,60 @@ const SignUpFields = ({
       name: "fullname",
       label: "Full Name",
       type: "text",
-      value: signUpInfo.fullname,
+      value: formData.fullname,
       half: true,
     },
     {
       name: "username",
       label: "Username",
       type: "text",
-      value: signUpInfo.username,
+      value: formData.username,
       half: true,
     },
     {
       name: "email",
       label: "Email Address",
       type: "email",
-      value: signUpInfo.email,
+      value: formData.email,
     },
     {
       name: "password",
       label: "Password",
       type: showPassword ? "text" : "password",
-      value: signUpInfo.password,
+      value: formData.password,
       handleShowPassword: handleShowPassword,
     },
     {
       name: "phoneNumber",
       label: "Phone Number",
       type: "text",
-      value: signUpInfo.phoneNumber,
+      value: formData.phoneNumber,
     },
     {
       name: "address",
       label: "Address",
       type: "text",
-      value: signUpInfo.address,
+      value: formData.address,
     },
     {
       name: "city",
       label: "City",
       type: "text",
-      value: signUpInfo.city,
+      value: formData.city,
       half: true,
     },
     {
       name: "state",
       label: "State",
       type: "text",
-      value: signUpInfo.state,
+      value: formData.state,
       half: true,
     },
     {
       name: "postalCode",
       label: "Postal Code",
       type: "text",
-      value: signUpInfo.postalCode,
+      value: formData.postalCode,
     },
   ];
 
@@ -78,6 +78,7 @@ const SignUpFields = ({
           handleChange={handleChange}
           handleShowPassword={handleShowPassword}
           autoFocus
+          required
         />
       ))}
     </>

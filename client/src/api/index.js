@@ -1,27 +1,23 @@
 import axios from "axios";
 
-const url = "http://localhost:5000/users";
+const API = axios.create({ baseURL: "http://localhost:5000" });
 
-export const fetchUsers = () => axios.get(url);
-export const registerUser = (newUser) => axios.post(url, newUser);
-export const loginUser = (newPost) => axios.post(url, newPost);
+export const fetchUsers = () => API.get("/users");
+export const register = (userData) => API.post("/users/signup", userData);
+export const login = (userData) => API.post("/users/login", userData);
 export const updateUser = (id, updateUserDto) =>
-  axios.put(`${url}/${id}`, updateUserDto);
-export const deleteUser = (id) => axios.delete(`${url}/${id}`);
+  API.put(`/users/${id}`, updateUserDto);
+export const deleteUser = (id) => API.delete(`/users/${id}`);
 
 // Fetching Deposit Endpoint
-const depositUrl = "http://localhost:5000/deposit";
-
-export const fetchDeposits = () => axios.get(depositUrl);
-export const createDeposit = (newDeposit) => axios.post(depositUrl, newDeposit);
-export const deleteDeposit = (id) => axios.delete(`${depositUrl}/${id}`);
+export const fetchDeposits = () => API.get("/deposit");
+export const createDeposit = (newDeposit) => API.post("/deposit", newDeposit);
+export const deleteDeposit = (id) => API.delete(`/deposit/${id}`);
 
 // Fetching Withdraw Endpoint
-const withdrawUrl = "http://localhost:5000/withdraw";
-
-export const fetchWithdraws = () => axios.get(withdrawUrl);
+export const fetchWithdraws = () => API.get("/withdraw");
 export const createWithdraw = (newWithdraw) =>
-  axios.post(withdrawUrl, newWithdraw);
+  API.post("/withdraw", newWithdraw);
 export const updateWithdraw = (id, updatedWithdraw) =>
-  axios.patch(`${withdrawUrl}/${id}`, updatedWithdraw);
-export const deleteWithdraw = (id) => axios.delete(`${withdrawUrl}/${id}`);
+  API.patch(`/withdraw/${id}`, updatedWithdraw);
+export const deleteWithdraw = (id) => API.delete(`/withdraw/${id}`);

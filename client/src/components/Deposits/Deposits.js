@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { Grid, CircularProgress } from "@material-ui/core";
-import { getDeposits } from "../../actions/deposits";
 import Deposit from "./Deposit/Deposit";
 import useStyles from "./styles";
 
@@ -11,9 +10,7 @@ const Deposits = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  useEffect(() => {
-    dispatch(getDeposits());
-  }, [dispatch]);
+  useEffect(() => {}, [dispatch]);
 
   return !deposits.length ? (
     <CircularProgress />

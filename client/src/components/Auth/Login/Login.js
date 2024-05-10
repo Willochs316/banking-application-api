@@ -12,19 +12,13 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { login, reset } from "../../../reducers/authSlice";
 import LoginFields from "./LoginFields";
-import {
-  validateEmail,
-  validatePassword,
-  validateUsername,
-} from "../SignUp/SignUpValidation";
 import useStyles from "../styles";
 
 const Login = ({ toggleMode }) => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
-  const [loginInfo, setLoginInfo] = useState({
+  const [formData, setFormaData] = useState({
     username: "",
     email: "",
     password: "",
@@ -46,7 +40,7 @@ const Login = ({ toggleMode }) => {
       navigate("/");
     }
 
-    dispatch(reset());
+    dispatch();
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   const handleShowPassword = () => setShowPassword((prev) => !prev);
@@ -54,7 +48,7 @@ const Login = ({ toggleMode }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setLoginInfo((prevInfo) => ({
+    setFormaData((prevInfo) => ({
       ...prevInfo,
       [name]: value,
     }));
@@ -62,22 +56,6 @@ const Login = ({ toggleMode }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const userData = {
-      username: loginInfo.username,
-      email: loginInfo.email,
-      password: loginInfo.password,
-    };
-
-    if (
-      validateUsername(loginInfo.username) &&
-      validateEmail(loginInfo.email) &&
-      validatePassword(loginInfo.password)
-    ) {
-      dispatch(login(userData));
-    } else {
-      toast.error("Invalid data provided for fields");
-    }
   };
 
   if (isLoading && user) {
@@ -94,7 +72,7 @@ const Login = ({ toggleMode }) => {
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <LoginFields
-              loginInfo={loginInfo}
+              formData={formData}
               showPassword={showPassword}
               handleShowPassword={handleShowPassword}
               handleChange={handleChange}

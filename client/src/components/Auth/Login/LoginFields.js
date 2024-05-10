@@ -2,7 +2,7 @@ import React from "react";
 import Input from "../Input";
 
 const LoginFields = ({
-  loginInfo,
+  formData,
   showPassword,
   handleShowPassword,
   handleChange,
@@ -12,19 +12,19 @@ const LoginFields = ({
       name: "username",
       label: "Username",
       type: "text",
-      value: loginInfo.username,
+      value: formData.username,
     },
     {
       name: "email",
       label: "Email Address",
       type: "email",
-      value: loginInfo.email,
+      value: formData.email,
     },
     {
       name: "password",
       label: "Password",
       type: showPassword ? "text" : "password",
-      value: loginInfo.password,
+      value: formData.password,
       handleShowPassword: handleShowPassword,
     },
   ];

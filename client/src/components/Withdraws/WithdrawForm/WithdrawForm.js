@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Button, Typography, Paper } from "@material-ui/core";
-import { useDispatch } from "react-redux";
-import { createWithdraw } from "../../../actions/withdraws";
 import Input from "./Input";
 import useStyles from "./styles";
 
@@ -15,12 +13,10 @@ const WithdrawForm = () => {
   });
 
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(createWithdraw(withdrawData));
     clear();
   };
 

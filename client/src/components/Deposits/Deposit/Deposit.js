@@ -6,14 +6,13 @@ import {
   CardContent,
   Typography,
 } from "@material-ui/core";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import DeleteIcon from "@material-ui/icons/Delete";
 import useStyles from "./styles";
-import { deleteDeposit } from "../../../actions/deposits";
 
 const Deposit = ({ deposit }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const depositFields = [
     { label: "Source Account Number", value: deposit.sourceAccountNumber },
@@ -43,7 +42,7 @@ const Deposit = ({ deposit }) => {
         <Button
           size="small"
           color="secondary"
-          onClick={() => dispatch(deleteDeposit(deposit._id))}
+          // onClick={() => dispatch(deleteDeposit(deposit._id))}
         >
           <DeleteIcon fontSize="small" />
           Delete

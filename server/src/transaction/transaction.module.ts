@@ -4,8 +4,9 @@ import { TransactionController } from './transaction.controller';
 import { TransactionService } from './transaction.service';
 import { TransactionSchema } from './schemas/transaction.schema';
 import { UserSchema } from 'src/users/schemas/user.schema';
-import { DepositSchema } from 'src/deposit/schemas/deposit.schema';
-import { WithdrawSchema } from 'src/withdraw/schemas/withdraw.schema';
+import { DepositService } from './deposit/desposit.service';
+import { WithdrawService } from './withdraw/withdraw.service';
+import { TransferService } from './transfer/transfer.service';
 
 @Module({
   imports: [
@@ -13,10 +14,13 @@ import { WithdrawSchema } from 'src/withdraw/schemas/withdraw.schema';
       { name: 'Transaction', schema: TransactionSchema },
     ]),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
-    MongooseModule.forFeature([{ name: 'Deposit', schema: DepositSchema }]),
-    MongooseModule.forFeature([{ name: 'Withdraw', schema: WithdrawSchema }]),
   ],
   controllers: [TransactionController],
-  providers: [TransactionService],
+  providers: [
+    TransactionService,
+    DepositService,
+    WithdrawService,
+    TransferService,
+  ],
 })
 export class TransactionModule {}

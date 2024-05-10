@@ -1,9 +1,10 @@
 export interface User {
   id?: string;
-  fullname: string;
-  username: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phoneNumber: string;
+  accountNumber: string;
+  initialBalance: number;
   accountBalance: number;
   password: string;
   address: string;

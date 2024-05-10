@@ -1,54 +1,66 @@
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
-  @ApiProperty({
-    description: 'this is a fullname',
-    example: 'John doe',
-  })
-  readonly fullname: string;
-  @ApiProperty({
-    description: 'this is a username',
-    example: 'John123',
-  })
-  readonly username: string;
-  @ApiProperty({
-    description: 'this is an email',
-    example: 'John123@gmail.com',
-  })
+  @ApiProperty({ description: 'First name', example: 'John' })
+  @IsNotEmpty()
+  @IsString()
+  readonly firstName: string;
+
+  @ApiProperty({ description: 'Last name', example: 'Doe' })
+  @IsNotEmpty()
+  @IsString()
+  readonly lastName: string;
+
+  @ApiProperty({ description: 'Email', example: 'johndoe@gmail.com' })
+  @IsNotEmpty()
+  @IsEmail()
   readonly email: string;
-  @ApiProperty({
-    description: 'this is a phonenumber',
-    example: '12345678901',
-  })
-  readonly phoneNumber: string;
-  @ApiProperty({
-    description: 'this is account balance',
-    example: '50000',
-  })
+
+  @ApiProperty({ description: 'Account number', example: '+2349078745647' })
+  @IsNotEmpty()
+  @IsString()
+  readonly accountNumber: string;
+
+  @ApiProperty({ description: 'Account balance', example: 50000 })
+  @IsNotEmpty()
+  @IsNumber()
   readonly accountBalance: number;
-  @ApiProperty({
-    description: 'this is a password',
-    example: 'abc123',
-  })
+
+  @ApiProperty({ description: 'Initial balance', example: 50000 })
+  @IsNotEmpty()
+  @IsNumber()
+  readonly initialBalance: number;
+
+  @ApiProperty({ description: 'Password', example: 'abc123' })
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(6)
   readonly password: string;
-  @ApiProperty({
-    description: 'this is an address',
-    example: '12 Atlanta',
-  })
+
+  @ApiProperty({ description: 'Address', example: '48102 Mayer Harbor' })
+  @IsNotEmpty()
+  @IsString()
   readonly address: string;
-  @ApiProperty({
-    description: 'this is a city',
-    example: 'Atlanta',
-  })
+
+  @ApiProperty({ description: 'City', example: 'Lagos' })
+  @IsNotEmpty()
+  @IsString()
   readonly city: string;
-  @ApiProperty({
-    description: 'this is a state',
-    example: 'Georgia',
-  })
+
+  @ApiProperty({ description: 'State', example: 'Lagos' })
+  @IsNotEmpty()
+  @IsString()
   readonly state: string;
-  @ApiProperty({
-    description: 'this is a postalcode',
-    example: '12345',
-  })
+
+  @ApiProperty({ description: 'Postal code', example: 12345 })
+  @IsNotEmpty()
+  @IsNumber()
   readonly postalCode: number;
 }

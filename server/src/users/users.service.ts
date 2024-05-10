@@ -3,6 +3,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -20,21 +21,30 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    return await this.userModel.findOne({ _id: id });
+    const user = await this.userModel.findOne({ _id: id });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
-  async findByPhoneNumber(phoneNumber: string): Promise<User> {
-    return await this.userModel.findOne({ phoneNumber });
+  async findByAccountNumber(accountNumber: string): Promise<User> {
+    const user = await this.userModel.findOne({ accountNumber });
+    if (!user) {
+      throw new NotFoundException('Account not found');
+    }
+    return user;
   }
 
   // @desc   Register new user
   // @route  POST /users
   async signup(user: User): Promise<{ user: User; token: string }> {
     const {
-      fullname,
-      username,
+      firstName,
+      lastName,
       email,
-      phoneNumber,
+      accountNumber,
+      initialBalance,
       password,
       address,
       city,
@@ -43,26 +53,37 @@ export class UsersService {
     } = user;
 
     if (
-      !fullname ||
-      !username ||
+      !firstName ||
+      !lastName ||
       !email ||
-      !phoneNumber ||
+      !accountNumber ||
+      initialBalance < 0 ||
       !password ||
       !address ||
       !city ||
       !state ||
       !postalCode
     ) {
+      if (initialBalance < 0) {
+        throw new BadRequestException('Initial balance must be positive');
+      }
       throw new BadRequestException('Please add all fields');
     }
 
-    // Check if email or phone number already exists
+    // Check if account number is a valid phone number
+    if (!/^\d{10}$/g.test(accountNumber)) {
+      throw new BadRequestException(
+        'Account number must be a valid phone number (10 digits).',
+      );
+    }
+
+    // Check if email or accountNumber already exists
     const existingUser = await this.userModel.findOne({
-      $or: [{ email }, { phoneNumber }],
+      $or: [{ email }, { accountNumber }],
     });
 
     if (existingUser) {
-      throw new ConflictException('Email or phone number already in use');
+      throw new ConflictException('Email or account number already in use');
     }
 
     // Hash password
@@ -72,8 +93,11 @@ export class UsersService {
     const newUser = new this.userModel({
       ...user,
       password: hashedPassword,
-      accountBalance: 0,
+      accountBalance: initialBalance || 0,
     });
+
+    // Remove initialBalance property from newUser
+    delete newUser['initialBalance'];
 
     const savedUser = await newUser.save();
 
@@ -89,28 +113,25 @@ export class UsersService {
   // @desc   Authenticate a user
   // @route  POST /users
   async login(user: User): Promise<{ user: User; token: string }> {
-    try {
-      const { username, email, password } = user;
+    const { email, password } = user;
 
-      // Validate input data
-      if (!username || !email || !password) {
-        throw new UnauthorizedException('Invalid input data');
-      }
+    // Validate input data
+    if (!email || !password) {
+      throw new UnauthorizedException('Invalid input data');
+    }
 
-      // Check for user by email
-      const foundUser = await this.userModel.findOne({ email });
+    // Check for user by email
+    const foundUser = await this.userModel.findOne({ email });
 
-      if (foundUser && (await bcrypt.compare(password, foundUser.password))) {
-        // Generate a JWT token
-        const token = this.generateJwtToken(foundUser.id);
-        return {
-          user: foundUser,
-          token,
-        };
-      }
+    if (foundUser && (await bcrypt.compare(password, foundUser.password))) {
+      // Generate a JWT token
+      const token = this.generateJwtToken(foundUser.id);
+      return {
+        user: foundUser,
+        token,
+      };
+    } else {
       throw new UnauthorizedException('Invalid credentials');
-    } catch (error) {
-      throw new UnauthorizedException('Authentication failed');
     }
   }
 

@@ -10,11 +10,7 @@ describe('TransactionService', () => {
       providers: [
         TransactionService,
         {
-          provide: getModelToken('Deposit'),
-          useValue: {},
-        },
-        {
-          provide: getModelToken('Withdraw'),
+          provide: getModelToken('Transaction'),
           useValue: {},
         },
         {

@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DepositService } from './deposit.service';
 import { getModelToken } from '@nestjs/mongoose';
+import { WithdrawService } from './withdraw.service';
 
-describe('DepositService', () => {
-  let service: DepositService;
+describe('WithdrawService', () => {
+  let service: WithdrawService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        DepositService,
+        WithdrawService,
         {
-          provide: getModelToken('Deposit'),
+          provide: getModelToken('Transaction'),
           useValue: {},
         },
         {
@@ -20,7 +20,7 @@ describe('DepositService', () => {
       ],
     }).compile();
 
-    service = module.get<DepositService>(DepositService);
+    service = module.get<WithdrawService>(WithdrawService);
   });
 
   it('should be defined', () => {

@@ -2,7 +2,6 @@ import React from "react";
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@material-ui/core";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout, reset } from "../../reducers/authSlice";
 import useStyles from "./styles";
 
 const Header = () => {
@@ -13,8 +12,8 @@ const Header = () => {
   const { user } = useSelector((state) => state.auth);
 
   const onLogout = () => {
-    dispatch(logout());
-    dispatch(reset());
+    dispatch();
+    dispatch();
     navigate("/");
   };
 
@@ -28,7 +27,7 @@ const Header = () => {
           variant="h2"
           align="center"
         >
-          Banking Application Api
+          Banking Application
         </Typography>
 
         <Toolbar className={classes.toolbar}>

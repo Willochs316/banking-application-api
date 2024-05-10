@@ -16,10 +16,6 @@ describe('TransactionController', () => {
           useValue: {},
         },
         {
-          provide: getModelToken('Withdraw'),
-          useValue: {},
-        },
-        {
           provide: getModelToken('User'),
           useValue: {},
         },

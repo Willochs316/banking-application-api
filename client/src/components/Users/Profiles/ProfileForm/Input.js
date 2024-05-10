@@ -4,7 +4,7 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import useStyles from "./styles";
 
-const Input = ({ profileData, setProfileData }) => {
+const Input = ({ formData, setFormData }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const classes = useStyles();
@@ -50,10 +50,10 @@ const Input = ({ profileData, setProfileData }) => {
           className={field.className}
           fullWidth
           type={field.type || "text"}
-          value={profileData[field.name] || ""}
+          value={formData[field.name] || ""}
           onChange={(e) =>
-            setProfileData({
-              ...profileData,
+            setFormData({
+              ...formData,
               [field.name]: e.target.value,
             })
           }
