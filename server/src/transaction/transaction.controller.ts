@@ -3,6 +3,7 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { TransactionService } from './transaction.service';
 import { DepositService } from './deposit/desposit.service';
 import { WithdrawService } from './withdraw/withdraw.service';
+import { TransferService } from './transfer/transfer.service';
 import { Transaction } from './interfaces/transaction.interface';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -13,6 +14,7 @@ export class TransactionController {
     private readonly transactionService: TransactionService,
     private readonly depositService: DepositService,
     private readonly withdrawService: WithdrawService,
+    private readonly transferService: TransferService,
   ) {}
 
   @Get(':id')
@@ -38,6 +40,6 @@ export class TransactionController {
   async transfer(
     @Body() createTransactionDto: CreateTransactionDto,
   ): Promise<Transaction> {
-    return this.transactionService.makeTransfer(createTransactionDto);
+    return this.transferService.makeTransfer(createTransactionDto);
   }
 }

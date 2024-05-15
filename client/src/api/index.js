@@ -1,8 +1,7 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:5000" });
+// const API = axios.create({ baseURL: "http://localhost:5000" });
 
-export const fetchUsers = () => API.get("/users");
 export const register = (userData) => API.post("/users/signup", userData);
 export const login = (userData) => API.post("/users/login", userData);
 export const updateUser = (id, updateUserDto) =>

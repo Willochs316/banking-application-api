@@ -7,6 +7,7 @@ export interface User {
   initialBalance: number;
   accountBalance: number;
   password: string;
+  pin: string;
   address: string;
   city: string;
   state: string;

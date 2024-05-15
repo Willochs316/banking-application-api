@@ -1,5 +1,13 @@
 import React from "react";
-import { AppBar, Avatar, Button, Toolbar, Typography } from "@material-ui/core";
+import {
+  AppBar,
+  Avatar,
+  Button,
+  Grid,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
+import Svgs from "../../assets/svgs";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import useStyles from "./styles";
@@ -19,16 +27,19 @@ const Header = () => {
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
-      <div className={classes.brandContainer}>
-        <Typography
-          component={Link}
-          to="/"
-          className={classes.heading}
-          variant="h2"
-          align="center"
-        >
-          Banking Application
-        </Typography>
+      <Grid container className={classes.brandContainer}>
+        <Grid item className={classes.banking}>
+          <Svgs.Banking className={classes.bankingIcon} />
+          <Typography
+            component={Link}
+            to="/"
+            className={classes.heading}
+            variant="h2"
+            align="center"
+          >
+            TrustBank
+          </Typography>
+        </Grid>
 
         <Toolbar className={classes.toolbar}>
           {user && user.user ? (
@@ -68,7 +79,7 @@ const Header = () => {
             </Button>
           )}
         </Toolbar>
-      </div>
+      </Grid>
     </AppBar>
   );
 };

@@ -1,5 +1,9 @@
 import { Model } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/users/interfaces/user.interface';
 import { Transaction } from '../interfaces/transaction.interface';
@@ -15,7 +19,15 @@ export class DepositService {
   // @desc   make deposit
   // @route  POST /deposit
   async makeDeposit(transaction: Transaction): Promise<Transaction> {
-    const { sourceAccountNumber, amount, reason } = transaction;
+    const { sourceAccountNumber, amount, reason, pin } = transaction;
+
+    // Verify PIN
+    const isPinValid = await this.userModel.findOne({
+      pin,
+    });
+    if (!isPinValid) {
+      throw new UnauthorizedException('Invalid PIN');
+    }
 
     let session = null;
 

@@ -14,11 +14,22 @@ export default makeStyles((theme) => ({
       flexDirection: "column",
     },
   },
+  brandContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  banking: {
+    display: "flex",
+    alignItems: "center",
+  },
   heading: {
     color: theme.palette.primary.main,
     textDecoration: "none",
     fontSize: "2em",
-    fontWeight: 300,
+    fontWeight: 500,
+    marginLeft: "14px",
   },
   image: {
     marginLeft: "10px",
@@ -50,12 +61,6 @@ export default makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     textAlign: "center",
-  },
-  brandContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
   },
   purple: {
     color: theme.palette.getContrastText(deepPurple[500]),

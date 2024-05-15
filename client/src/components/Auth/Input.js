@@ -12,6 +12,7 @@ const Input = ({
   half,
   type,
   handleShowPassword,
+  handleShowPin,
 }) => {
   return (
     <Grid item xs={12} sm={half ? 6 : 12}>
@@ -26,11 +27,15 @@ const Input = ({
         autoFocus={autoFocus}
         type={type}
         InputProps={
-          name === "password"
+          name === "password" || name === "pin"
             ? {
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={handleShowPassword}>
+                    <IconButton
+                      onClick={
+                        name === "password" ? handleShowPassword : handleShowPin
+                      }
+                    >
                       {type === "password" ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>

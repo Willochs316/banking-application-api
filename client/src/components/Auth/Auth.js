@@ -13,15 +13,17 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Input from "./Input";
-import { login, register, reset } from "../../features/auth/authSlice";
+import { login, register, reset } from "../../redux/features/auth/authSlice";
 import useStyles from "./styles";
 
 const initialState = {
-  fullname: "",
-  username: "",
+  firstName: "",
+  lastName: "",
   email: "",
+  accountNumber: "",
+  initialBalance: "",
   password: "",
-  phoneNumber: "",
+  pin: "",
   address: "",
   city: "",
   state: "",
@@ -29,9 +31,11 @@ const initialState = {
 };
 
 const Auth = () => {
-  const [formData, setFormaData] = useState(initialState);
+  const [formData, setFormData] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showPin, setShowPin] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -40,22 +44,22 @@ const Auth = () => {
     (state) => state.auth
   );
 
-  useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    }
-
-    if (isAuthenticated || user) {
-      navigate("/");
-    }
-
-    dispatch(reset());
-  }, [user, isError, isAuthenticated, message, navigate, dispatch]);
+  // useEffect(() => {
+  //   if (isError) {
+  //     toast.error(message);
+  //   }
+  //   if (isAuthenticated || user) {
+  //     navigate("/");
+  //   }
+  //   dispatch(reset());
+  // }, [user, isError, isAuthenticated, message, navigate, dispatch]);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
+  const handleShowPin = () => setShowPin(!showPin);
+
   const toggleMode = () => {
-    setFormaData(initialState);
+    setFormData(formData);
     setIsSignup((prevIsSignup) => !prevIsSignup);
     setShowPassword(false);
   };
@@ -63,31 +67,17 @@ const Auth = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userData = {
-      fullname: formData.fullname,
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-      phoneNumber: formData.phoneNumber,
-      address: formData.address,
-      city: formData.city,
-      state: formData.state,
-      postalCode: formData.postalCode,
-    };
-
     if (isSignup) {
-      dispatch(register(userData));
+      dispatch(register(formData, navigate("/")));
     } else {
-      dispatch(login(formData));
+      dispatch(login(formData, navigate("/")));
     }
+    // Reset form data states
+    setFormData(initialState);
   };
 
   const handleChange = (e) =>
-    setFormaData({ ...formData, [e.target.name]: e.target.value });
-
-  if (isLoading) {
-    return <CircularProgress />;
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   return (
     <Container component="main" maxWidth="xs">
@@ -98,104 +88,131 @@ const Auth = () => {
         <Typography component="h1" variant="h5">
           {isSignup ? "Sign up" : "Log in"}
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            {isSignup && (
-              <>
-                <Input
-                  name="firstName"
-                  label="First Name"
-                  handleChange={handleChange}
-                  autoFocus
-                  half
-                />
-                <Input
-                  name="lastName"
-                  label="Last Name"
-                  handleChange={handleChange}
-                  half
-                />
-              </>
-            )}
-            <Input
-              name="email"
-              label="Email Address"
-              handleChange={handleChange}
-              type="email"
-            />
-            <Input
-              name="password"
-              label="Password"
-              handleChange={handleChange}
-              type={showPassword ? "text" : "password"}
-              handleShowPassword={handleShowPassword}
-            />
-            {isSignup && (
+
+        {isLoading ? (
+          <CircularProgress />
+        ) : (
+          <form className={classes.form} onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              {isSignup && (
+                <>
+                  <Input
+                    name="firstName"
+                    label="First Name"
+                    handleChange={handleChange}
+                    value={formData.firstName}
+                    autoFocus
+                    half
+                  />
+                  <Input
+                    name="lastName"
+                    label="Last Name"
+                    handleChange={handleChange}
+                    value={formData.lastName}
+                    half
+                  />
+                </>
+              )}
               <Input
-                name="confirmPassword"
-                label="Confirm Password"
+                name="email"
+                label="Email Address"
                 handleChange={handleChange}
-                type="password"
+                value={isSignup ? formData.email : formData.email}
+                type="email"
               />
-            )}
-
-            {isSignup && (
-              <>
-                <Input
-                  name="phoneNumber"
-                  label="Phone Number"
-                  handleChange={handleChange}
-                  type="text"
-                />
-                <Input
-                  name="address"
-                  label="Address"
-                  handleChange={handleChange}
-                  type="text"
-                />
-                <Input
-                  name="state"
-                  label="State"
-                  handleChange={handleChange}
-                  type="text"
-                  half
-                />
-                <Input
-                  name="city"
-                  label="City"
-                  handleChange={handleChange}
-                  type="text"
-                  half
-                />
-                <Input
-                  name="postalCode"
-                  label="Postal Code"
-                  handleChange={handleChange}
-                  type="text"
-                />
-              </>
-            )}
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            {isSignup ? "Sign Up" : "Sign In"}
-          </Button>
-
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Button onClick={toggleMode}>
-                {isSignup
-                  ? "Already have an account? Log in"
-                  : "Don't have an account? Sign Up"}
-              </Button>
+              {isSignup && (
+                <>
+                  <Input
+                    name="accountNumber"
+                    label="Account Number"
+                    handleChange={handleChange}
+                    value={formData.accountNumber}
+                    type="text"
+                  />
+                  <Input
+                    name="initialBalance"
+                    label="Initial Balance"
+                    handleChange={handleChange}
+                    value={formData.initialBalance}
+                    type="text"
+                    half
+                  />
+                  <Input
+                    name="pin"
+                    label="Pin"
+                    handleChange={handleChange}
+                    value={formData.pin}
+                    type={showPin ? "text" : "password"}
+                    handleShowPin={handleShowPin}
+                    half
+                  />
+                </>
+              )}
+              <Input
+                name="password"
+                label="Password"
+                handleChange={handleChange}
+                type={showPassword ? "text" : "password"}
+                value={isSignup ? formData.password : formData.password}
+                handleShowPassword={handleShowPassword}
+              />
+              {isSignup && (
+                <>
+                  <Input
+                    name="address"
+                    label="Address"
+                    handleChange={handleChange}
+                    value={formData.address}
+                    type="text"
+                  />
+                  <Input
+                    name="state"
+                    label="State"
+                    handleChange={handleChange}
+                    value={formData.state}
+                    type="text"
+                    half
+                  />
+                  <Input
+                    name="city"
+                    label="City"
+                    handleChange={handleChange}
+                    value={formData.city}
+                    type="text"
+                    half
+                  />
+                  <Input
+                    name="postalCode"
+                    label="Postal Code"
+                    handleChange={handleChange}
+                    value={formData.postalCode}
+                    type="text"
+                  />
+                </>
+              )}
             </Grid>
-          </Grid>
-        </form>
+            <Button
+              onSubmit={handleSubmit}
+              type="submit"
+              className={classes.submit}
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
+              {isSignup ? "Sign Up" : "Sign In"}
+            </Button>
+
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Button onClick={toggleMode}>
+                  {isSignup
+                    ? "Already have an account? Log in"
+                    : "Don't have an account? Sign Up"}
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
       </Paper>
     </Container>
   );

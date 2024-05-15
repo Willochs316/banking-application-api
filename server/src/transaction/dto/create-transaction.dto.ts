@@ -44,8 +44,14 @@ export class CreateTransactionDto extends Document {
   readonly type: 'deposit' | 'withdraw' | 'transfer';
 
   @ApiProperty()
+  @IsNotEmpty()
   @IsString()
   readonly reason: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  readonly pin: number;
 
   @ApiProperty()
   @IsNotEmpty()

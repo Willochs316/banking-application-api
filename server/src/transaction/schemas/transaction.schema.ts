@@ -40,7 +40,11 @@ export const TransactionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
+  pin: {
+    type: Number,
+    required: [true, 'Please add a PIN'],
+    unique: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -1,24 +1,29 @@
-import { Container } from "@material-ui/core";
-import Header from "./components/Header/Header";
-import NavBar from "./components/Header/NavBar";
-import Pages from "./pages/pages";
-import { useSelector } from "react-redux";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Container, Grow } from "@material-ui/core";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import useStyles from "./styles";
+import Header from "./components/Header/Header";
+// import NavBar from "./components/Header/NavBar";
+import Auth from "./components/Auth/Auth";
+import Home from "./pages/Home/Home";
 
 const App = () => {
-  // const classes = useStyles();
-
-  const { user } = useSelector((state) => state.auth);
-
   return (
     <>
-      <Container maxWidth="lg">
-        <Header />
-        {user && <NavBar />}
-        <Pages />
-      </Container>
+      <Router>
+        <Container maxWidth="lg">
+          <Header />
+
+          <Grow in>
+            {/* {user && <NavBar />} */}
+            <Routes>
+              <Route path="/" element={<Home />} />
+
+              <Route path="/auth" element={<Auth />} />
+            </Routes>
+          </Grow>
+        </Container>
+      </Router>
       <ToastContainer />
     </>
   );

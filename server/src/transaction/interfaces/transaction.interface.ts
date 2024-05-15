@@ -11,5 +11,6 @@ export interface Transaction extends Document {
   amount: number;
   type: 'deposit' | 'withdraw' | 'transfer';
   reason: string;
+  pin: number;
   createdAt: Date;
 }

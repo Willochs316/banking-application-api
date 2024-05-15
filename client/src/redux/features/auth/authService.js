@@ -1,8 +1,8 @@
-const apiUrl = "/users/";
+const apiUrl = "http://localhost:5000";
 
 // Register user
 const register = async (userData) => {
-  const response = await fetch(apiUrl + "signup", {
+  const response = await fetch(apiUrl + "/users/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,7 +20,7 @@ const register = async (userData) => {
 
 // Login user
 const login = async (userData) => {
-  const response = await fetch(apiUrl + "login", {
+  const response = await fetch(apiUrl + "/users/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

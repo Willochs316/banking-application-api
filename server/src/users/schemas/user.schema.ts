@@ -44,6 +44,10 @@ export const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please add a password'],
     },
+    pin: {
+      type: String,
+      required: [true, 'Please add a pin'],
+    },
     address: String,
     city: String,
     state: String,

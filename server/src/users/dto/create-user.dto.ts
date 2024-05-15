@@ -44,6 +44,12 @@ export class CreateUserDto {
   @MinLength(6)
   readonly password: string;
 
+  @ApiProperty({ description: 'Password', example: 'abc123' })
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(6)
+  readonly pin: string;
+
   @ApiProperty({ description: 'Address', example: '48102 Mayer Harbor' })
   @IsNotEmpty()
   @IsString()

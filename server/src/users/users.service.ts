@@ -46,6 +46,7 @@ export class UsersService {
       accountNumber,
       initialBalance,
       password,
+      pin,
       address,
       city,
       state,
@@ -59,6 +60,7 @@ export class UsersService {
       !accountNumber ||
       initialBalance < 0 ||
       !password ||
+      !pin ||
       !address ||
       !city ||
       !state ||
@@ -90,9 +92,13 @@ export class UsersService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Hash PIN number with salt
+    const hashedPin = await bcrypt.hash(pin, salt);
+
     const newUser = new this.userModel({
       ...user,
       password: hashedPassword,
+      pin: hashedPin,
       accountBalance: initialBalance || 0,
     });
 
