@@ -17,10 +17,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { LoginDto } from './dto/login-user.dto';
-import { RolesGuard } from 'src/roles/role.guard';
-import { Role } from 'src/roles/role.enum';
-import { Roles } from 'src/roles/role.decorator';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { RolesGuard } from '../roles/role.guard';
+import { Role } from '../roles/role.enum';
+import { Roles } from '../roles/role.decorator';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
 @ApiTags('User')
 @Controller('v1/user')

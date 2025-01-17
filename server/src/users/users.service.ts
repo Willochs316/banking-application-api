@@ -7,13 +7,11 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './interfaces/user.interface';
-import { jwtSecret } from '../config/keys';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login-user.dto';
-import { Role } from 'src/roles/role.enum';
+import { Role } from '../roles/role.enum';
 
 @Injectable()
 export class UsersService {
@@ -138,7 +136,7 @@ export class UsersService {
   }
 
   async delete(id: string): Promise<User> {
-    return await this.userModel.findByIdAndRemove(id);
+    return await this.userModel.findByIdAndDelete(id);
   }
 
   async updateUser(id: string, updateUserDto: CreateUserDto): Promise<User> {

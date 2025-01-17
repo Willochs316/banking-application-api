@@ -3,8 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UserSchema } from './schemas/user.schema';
-import { JwtStrategy } from 'src/guards/jwt-strategy';
-import { jwtSecret } from 'src/config/keys';
+import { JwtStrategy } from '../guards/jwt-strategy';
+import { jwtSecret } from '../config/keys';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({

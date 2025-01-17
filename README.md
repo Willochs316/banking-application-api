@@ -26,7 +26,7 @@
 
 ## Description
 
-The Banking Application, built with NestJS, offers essential functionality for handling deposits, withdrawals, transaction history, and user authentication/authorization in a secure and efficient manner. It serves as the core backend system for a basic digital banking platform.
+This is a Banking Application built with NestJS. It offers essential functionality for handling deposits, withdrawals, transaction history, and user authentication/authorization in a secure and efficient manner. It serves as the core backend system for a basic digital banking platform.
 
 ## Key Features:
 
@@ -139,7 +139,7 @@ $ npm run test:cov
 
 ## Stay in touch
 
-- Author - [Willochs Ojigbo](https://www.linkedin.com/in/willochs316/)
+- Author - [Willochs Ojigbo](https://dev.to/willochs316)
 - Linkedin - [@willochs316](https://www.linkedin.com/in/willochs316/)
 
 ## License

@@ -7,11 +7,10 @@ import {
   IsOptional,
   IsString,
   Matches,
-  Max,
   Min,
   MinLength,
 } from 'class-validator';
-import { Role } from 'src/roles/role.enum';
+import { Role } from '../../roles/role.enum';
 
 export class CreateUserDto {
   @ApiProperty({ description: 'First name', example: 'John' })

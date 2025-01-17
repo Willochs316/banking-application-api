@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Transaction } from './interfaces/transaction.interface';
-import { User } from 'src/users/interfaces/user.interface';
+import { User } from '../users/interfaces/user.interface';
 
 @Injectable()
 export class TransactionService {
