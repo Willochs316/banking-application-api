@@ -19,8 +19,6 @@
     <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
   <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Title: Banking Application
 
@@ -53,16 +51,58 @@ The Banking Application, built with NestJS, offers essential functionality for h
 - Users can retrieve their transaction history.
 - Transaction history includes details like date, type (deposit or withdrawal), amount, and transaction ID.
 
-## Tech Stack:
+## Frameworks and Libraries:
 
-- NestJS: For building a scalable and maintainable API.
-- Node.js: The backend server is built on the Node.js runtime.
-- TypeScript: TypeScript for strong typing and code maintainability.
-- JWT: JSON Web Tokens for secure authentication.
+1. NestJS:
+
+    - `@nestjs/common:` Common utilities and decorators for building NestJS applications.
+    - `@nestjs/core:` Core functionalities of NestJS, including the application context and module system.
+    - `@nestjs/jwt:` JWT (JSON Web Tokens) integration for authentication.
+    - `@nestjs/mongoose:` Mongoose integration for MongoDB.
+    - `@nestjs/passport:` Passport.js integration for authentication.
+    - `@nestjs/platform-express:` Express platform integration for NestJS.
+    - `@nestjs/swagger:` Swagger/OpenAPI documentation for the API.
+
+2. Authentication and Security:
+
+    - `@nestjs/jwt:` For generating and validating JWT tokens.
+    - `@nestjs/passport:` For integrating Passport.js authentication strategies.
+    - `passport:` Core Passport.js library for authentication.
+    - `passport-jwt:` JWT strategy for Passport.js.
+    - `bcrypt:` For hashing and verifying passwords.
+    - `jsonwebtoken:` For generating and verifying JWT tokens.
+
+3. Database:
+
+    - `mongoose:` ODM (Object Data Modeling) library for MongoDB.
+
+4. Validation and Transformation:
+
+    - `class-transformer:` For transforming class instances to and from plain objects.
+    - `class-validator:` For validating class instances using decorators.
+
+5. Environment Variables:
+
+    - `dotenv:` For loading environment variables from a `.env` file.
+
+6. Testing:
+
+    - `jest:` JavaScript testing framework.
+    - `@types/jest:` TypeScript definitions for Jest.
+    - `ts-jest:` Jest transformer for TypeScript.
+    - `supertest:` Library for testing HTTP servers.
+    - `@types/supertest:` TypeScript definitions for Supertest.
+
+7. TypeScript:
+
+    - `typescript:` TypeScript compiler.
+    - `ts-loader:` Webpack loader for TypeScript.
+    - `ts-node:` TypeScript execution and REPL for Node.js.
+    - `tsconfig-paths:` TypeScript module resolution for Webpack and Node.js.
 
 ## Swagger Documentation:
 
-- Access API documentation at http://localhost:3000/api/.
+- Access API documentation at http://localhost:5000/api/.
 - Comprehensive Swagger documentation to understand API endpoints and usage.
 
 ## Installation
@@ -97,16 +137,9 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-Video For:
-
-- [User Registeration](https://www.loom.com/share/cdfcb850bcfa4af9aaa46a8618394790?sid=61ed59d2-d492-4c3c-bd5f-1e4c6958be52)
-- [Login User](https://www.loom.com/share/c694d18f56ed4b2ba84c3177c0ff688a?sid=c3f86a32-0f10-4946-afa0-681885ce32b6)
-- [Deposit](https://www.loom.com/share/4e93f03258184db3bf6cd7233c91875e?sid=d891d1f8-1324-420e-85c4-1637ba8b727d)
-- [Withdraw / Transaction History](https://www.loom.com/share/dceb59a854cf4e918a6566c9b5b6e6a8?sid=0c7bc924-db8e-4b25-b1e1-57bd967dd4c1)
-
 ## Stay in touch
 
-- Author - [Willochs Ojigbo](https://kamilmysliwiec.com)
+- Author - [Willochs Ojigbo](https://www.linkedin.com/in/willochs316/)
 - Linkedin - [@willochs316](https://www.linkedin.com/in/willochs316/)
 
 ## License
