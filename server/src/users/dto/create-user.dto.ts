@@ -1,11 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
+  Matches,
+  Max,
+  Min,
   MinLength,
 } from 'class-validator';
+import { Role } from 'src/roles/role.enum';
 
 export class CreateUserDto {
   @ApiProperty({ description: 'First name', example: 'John' })
@@ -18,39 +24,38 @@ export class CreateUserDto {
   @IsString()
   readonly lastName: string;
 
+  @ApiProperty({ description: 'Username', example: 'johndoe123' })
+  @IsNotEmpty()
+  @IsString()
+  readonly username: string;
+
   @ApiProperty({ description: 'Email', example: 'johndoe@gmail.com' })
   @IsNotEmpty()
   @IsEmail()
   readonly email: string;
 
-  @ApiProperty({ description: 'Account number', example: '+2349078745647' })
-  @IsNotEmpty()
+  @ApiProperty({ description: 'Account number', example: '9071723315' })
+  @IsNotEmpty({ message: 'Account number is required.' })
   @IsString()
+  @Matches(/^\d{10}$/, { message: 'Account number must be 10 digits' })
   readonly accountNumber: string;
 
-  @ApiProperty({ description: 'Account balance', example: 50000 })
-  @IsNotEmpty()
-  @IsNumber()
-  readonly accountBalance: number;
-
   @ApiProperty({ description: 'Initial balance', example: 50000 })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Initial balance is required.' })
   @IsNumber()
+  @Min(0, { message: 'Initial balance cannot be negative' })
   readonly initialBalance: number;
 
   @ApiProperty({ description: 'Password', example: 'abc123' })
   @IsNotEmpty()
   @IsString()
-  @MinLength(6)
+  @MinLength(6, { message: 'Password must be at least 6 characters long.' })
   readonly password: string;
 
-  @ApiProperty({ description: 'Password', example: 'abc123' })
-  @IsNotEmpty()
-  @IsString()
-  @MinLength(6)
-  readonly pin: string;
-
-  @ApiProperty({ description: 'Address', example: '48102 Mayer Harbor' })
+  @ApiProperty({
+    description: 'Address',
+    example: '549 W International Airport Rd',
+  })
   @IsNotEmpty()
   @IsString()
   readonly address: string;
@@ -61,12 +66,21 @@ export class CreateUserDto {
   readonly city: string;
 
   @ApiProperty({ description: 'State', example: 'Lagos' })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'State is required.' })
   @IsString()
   readonly state: string;
 
-  @ApiProperty({ description: 'Postal code', example: 12345 })
+  @ApiProperty({ description: 'Postal code', example: 10045 })
   @IsNotEmpty()
   @IsNumber()
   readonly postalCode: number;
+
+  @ApiProperty({ description: 'User role', example: 'USER', enum: Role })
+  @IsOptional()
+  @IsString()
+  readonly role?: Role;
+
+  @IsOptional()
+  @IsBoolean()
+  readonly isDeleted?: boolean;
 }

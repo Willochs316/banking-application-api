@@ -2,15 +2,12 @@ import { Document } from 'mongoose';
 
 export interface Transaction extends Document {
   id?: string;
-  sourceName: string;
-  source: string;
-  sourceAccountNumber: string;
-  destinationName: string;
-  destination: string;
-  destinationAccountNumber: string;
+  transactionType: 'Deposit' | 'Withdrawal' | 'Transfer' | 'Balance Inquiry' | 'Statement Request';
+  date: Date;
   amount: number;
-  type: 'deposit' | 'withdraw' | 'transfer';
-  reason: string;
-  pin: number;
-  createdAt: Date;
+  fromAccount?: string;
+  toAccount?: string;
+  description?: string;
+  userId: string;
+  status: 'Pending' | 'Completed' | 'Failed';
 }

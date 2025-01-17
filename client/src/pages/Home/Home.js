@@ -1,4 +1,4 @@
-import { Container, Grow } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 
 const Home = () => {
   return (

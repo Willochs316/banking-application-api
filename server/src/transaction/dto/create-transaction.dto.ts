@@ -1,60 +1,48 @@
-import { Document } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsOptional,
+  IsEnum,
+} from 'class-validator';
 
-export class CreateTransactionDto extends Document {
-  @ApiProperty()
+export class CreateTransactionDto {
+  @ApiProperty({
+    description: 'Transaction type',
+    enum: ['DEPOSIT', 'WITHDRAWAL', 'TRANSFER', 'PAYMENT'],
+  })
+  @IsEnum(['DEPOSIT', 'WITHDRAWAL', 'TRANSFER', 'PAYMENT'])
   @IsNotEmpty()
   @IsString()
-  readonly sourceName: string;
+  readonly transactionType: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  readonly source: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  readonly sourceAccountNumber: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  readonly destinationName: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  readonly destination: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  readonly destinationAccountNumber: string;
-
-  @ApiProperty()
+  @ApiProperty({ description: 'Amount of the transaction', example: 5000 })
   @IsNotEmpty()
   @IsNumber()
   readonly amount: number;
 
-  @ApiProperty({ enum: ['deposit', 'withdraw', 'transfer'] })
-  @IsNotEmpty()
+  @ApiProperty({
+    description: 'From Account (if transferring)',
+    example: '9071723315',
+  })
+  @IsOptional()
   @IsString()
-  readonly type: 'deposit' | 'withdraw' | 'transfer';
+  readonly fromAccount?: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
+  @ApiProperty({
+    description: 'To Account (if transferring)',
+    example: '9071723316',
+  })
+  @IsOptional()
   @IsString()
-  readonly reason: string;
+  readonly toAccount?: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Description of the transaction',
+    example: 'ATM withdrawal',
+  })
+  @IsOptional()
   @IsString()
-  readonly pin: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsDate()
-  readonly createdAt: Date;
+  readonly description?: string;
 }

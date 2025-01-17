@@ -1,45 +1,35 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { TransactionService } from './transaction.service';
-import { DepositService } from './deposit/desposit.service';
-import { WithdrawService } from './withdraw/withdraw.service';
-import { TransferService } from './transfer/transfer.service';
-import { Transaction } from './interfaces/transaction.interface';
 import { ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 
-@ApiTags('Transaction')
-@Controller('transaction')
+@ApiTags('Transactions')
+@Controller('v1/user/transaction')
+@UseGuards(JwtAuthGuard)
 export class TransactionController {
-  constructor(
-    private readonly transactionService: TransactionService,
-    private readonly depositService: DepositService,
-    private readonly withdrawService: WithdrawService,
-    private readonly transferService: TransferService,
-  ) {}
-
-  @Get(':id')
-  async getUserTransactions(@Param('id') id: string): Promise<Transaction[]> {
-    return this.transactionService.getUserTransactions(id);
-  }
+  constructor(private readonly transactionService: TransactionService) {}
 
   @Post('deposit')
-  async deposit(
-    @Body() createTransactionDto: CreateTransactionDto,
-  ): Promise<Transaction> {
-    return this.depositService.makeDeposit(createTransactionDto);
+  async deposit(@Req() req, @Body() createTransactionDto: CreateTransactionDto) {
+    const userId = req.user._id;
+    return this.transactionService.deposit(userId, createTransactionDto.amount);
   }
 
   @Post('withdraw')
-  async withdraw(
-    @Body() createTransactionDto: CreateTransactionDto,
-  ): Promise<Transaction> {
-    return this.withdrawService.makeWithdrawal(createTransactionDto);
+  async withdraw(@Req() req, @Body() createTransactionDto: CreateTransactionDto) {
+    const userId = req.user._id;
+    return this.transactionService.withdraw(userId, createTransactionDto.amount);
   }
 
   @Post('transfer')
-  async transfer(
-    @Body() createTransactionDto: CreateTransactionDto,
-  ): Promise<Transaction> {
-    return this.transferService.makeTransfer(createTransactionDto);
+  async transfer(@Req() req, @Body() createTransactionDto: CreateTransactionDto) {
+    const userId = req.user._id;
+    return this.transactionService.transfer(
+      userId,
+      createTransactionDto.fromAccount,
+      createTransactionDto.toAccount,
+      createTransactionDto.amount,
+    );
   }
 }

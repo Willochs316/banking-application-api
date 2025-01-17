@@ -1,7 +1,6 @@
 import { Model } from 'mongoose';
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -9,150 +8,153 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
 import { User } from './interfaces/user.interface';
 import { jwtSecret } from '../config/keys';
+import { CreateUserDto } from './dto/create-user.dto';
+import { LoginDto } from './dto/login-user.dto';
+import { Role } from 'src/roles/role.enum';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectModel('User') private readonly userModel: Model<User>,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  async findAll(): Promise<User[]> {
-    return await this.userModel.find();
+  async findAll(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.userModel.find().lean();
+
+    return users.map(({ password, ...result }) => result);
   }
 
-  async findOne(id: string): Promise<User> {
-    const user = await this.userModel.findOne({ _id: id });
+  async findOne(id: string): Promise<Omit<User, 'password'>> {
+    const user = await this.userModel.findOne({ _id: id }).lean();
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    return user;
+
+    const { password, ...result } = user;
+    return result;
   }
 
-  async findByAccountNumber(accountNumber: string): Promise<User> {
-    const user = await this.userModel.findOne({ accountNumber });
+  async findByAccountNumber(
+    accountNumber: string,
+  ): Promise<Omit<User, 'password'>> {
+    const user = await this.userModel.findOne({ accountNumber }).lean();
     if (!user) {
       throw new NotFoundException('Account not found');
     }
-    return user;
+    const { password, ...result } = user;
+
+    return result;
   }
 
-  // @desc   Register new user
-  // @route  POST /users
-  async signup(user: User): Promise<{ user: User; token: string }> {
-    const {
-      firstName,
-      lastName,
-      email,
-      accountNumber,
-      initialBalance,
-      password,
-      pin,
-      address,
-      city,
-      state,
-      postalCode,
-    } = user;
+  /**
+   * @desc Create a new user (register) and return a JWT token
+   * @param createUserDto - Data transfer object containing user details
+   * @returns The created user and JWT token
+   */
+  async createUser(
+    createUserDto: CreateUserDto,
+  ): Promise<{ user: Omit<User, 'password'>; token: string }> {
+    const { email, accountNumber, role } = createUserDto;
 
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !accountNumber ||
-      initialBalance < 0 ||
-      !password ||
-      !pin ||
-      !address ||
-      !city ||
-      !state ||
-      !postalCode
-    ) {
-      if (initialBalance < 0) {
-        throw new BadRequestException('Initial balance must be positive');
-      }
-      throw new BadRequestException('Please add all fields');
-    }
-
-    // Check if account number is a valid phone number
-    if (!/^\d{10}$/g.test(accountNumber)) {
-      throw new BadRequestException(
-        'Account number must be a valid phone number (10 digits).',
-      );
-    }
-
-    // Check if email or accountNumber already exists
     const existingUser = await this.userModel.findOne({
       $or: [{ email }, { accountNumber }],
     });
 
     if (existingUser) {
-      throw new ConflictException('Email or account number already in use');
+      throw new BadRequestException('Email or account number already exists');
     }
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const assignedRole = role || Role.USER;
 
-    // Hash PIN number with salt
-    const hashedPin = await bcrypt.hash(pin, salt);
+    // Create and save the user
+    const createdUser = new this.userModel({
+      ...createUserDto,
+      role: assignedRole,
+    });
+    await createdUser.save();
 
-    const newUser = new this.userModel({
-      ...user,
-      password: hashedPassword,
-      pin: hashedPin,
-      accountBalance: initialBalance || 0,
+    const token = this.jwtService.sign({
+      id: createdUser._id,
+      role: assignedRole,
     });
 
-    // Remove initialBalance property from newUser
-    delete newUser['initialBalance'];
+    const { password, ...result } = createdUser.toObject();
 
-    const savedUser = await newUser.save();
-
-    // Generate a JWT token for the newly registered user
-    const token = this.generateJwtToken(savedUser.id);
-
-    return {
-      user: savedUser,
-      token,
-    };
+    return { user: result as Omit<User, 'password'>, token };
   }
 
-  // @desc   Authenticate a user
-  // @route  POST /users
-  async login(user: User): Promise<{ user: User; token: string }> {
-    const { email, password } = user;
-
-    // Validate input data
-    if (!email || !password) {
-      throw new UnauthorizedException('Invalid input data');
-    }
+  /**
+   * @desc Handle user login and return JWT token.
+   * @param loginDto - Login data containing username and password
+   * @returns JWT token for the user
+   */
+  async login(
+    loginDto: LoginDto,
+  ): Promise<{ user: Omit<User, 'password'>; token: string }> {
+    const { username, password } = loginDto;
 
     // Check for user by email
-    const foundUser = await this.userModel.findOne({ email });
+    const user = await this.userModel.findOne({ username });
 
-    if (foundUser && (await bcrypt.compare(password, foundUser.password))) {
-      // Generate a JWT token
-      const token = this.generateJwtToken(foundUser.id);
-      return {
-        user: foundUser,
-        token,
-      };
-    } else {
-      throw new UnauthorizedException('Invalid credentials');
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
+
+    if (user.isDeleted) {
+      throw new UnauthorizedException('Account is deleted');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid password');
+    }
+
+    const token = this.jwtService.sign({ id: user._id, role: user.role });
+
+    const { password: _, ...result } = user.toObject();
+
+    return { user: result as Omit<User, 'password'>, token };
   }
 
-  private generateJwtToken(id): string {
-    const token = jwt.sign({ _id: id }, jwtSecret, {
-      expiresIn: '1h',
-    });
-    return token;
+  async softDelete(id: string): Promise<User> {
+    const user = await this.userModel.findById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.isDeleted) {
+      throw new BadRequestException('User is already deleted');
+    }
+
+    user.isDeleted = true;
+    await user.save();
+
+    return user;
   }
 
   async delete(id: string): Promise<User> {
     return await this.userModel.findByIdAndRemove(id);
   }
 
-  async update(id: string, user: User): Promise<User> {
-    return await this.userModel.findByIdAndUpdate(id, user, { new: true });
+  async updateUser(id: string, updateUserDto: CreateUserDto): Promise<User> {
+    const user = await this.userModel.findById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.isDeleted) {
+      throw new BadRequestException('Cannot update a deleted user');
+    }
+
+    Object.assign(user, updateUserDto);
+    await user.save();
+
+    return user;
   }
 }

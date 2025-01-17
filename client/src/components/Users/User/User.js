@@ -6,7 +6,6 @@ import useStyles from "./styles";
 const User = ({ user }) => {
   const classes = useStyles();
 
-  // If the user is not logged in, don't render the component
   if (!user) {
     return null;
   }
@@ -29,7 +28,7 @@ const User = ({ user }) => {
   return (
     <Card className={classes.card}>
       <div className={classes.overlay2}>
-        <Button color="default" size="small" onClick={() => {}}>
+        <Button color="default" size="small" onClick={() => { }}>
           <MoreHorizIcon fontSize="medium" />
         </Button>
       </div>

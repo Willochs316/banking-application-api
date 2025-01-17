@@ -1,15 +1,19 @@
-export interface User {
+import { Document } from 'mongoose';
+import { Role } from 'src/roles/role.enum';
+
+export interface User extends Document {
   id?: string;
   firstName: string;
   lastName: string;
+  username: string;
   email: string;
   accountNumber: string;
   initialBalance: number;
-  accountBalance: number;
-  password: string;
-  pin: string;
+  password?: string;
   address: string;
   city: string;
   state: string;
   postalCode: number;
+  isDeleted?: boolean;
+  role: Role;
 }
